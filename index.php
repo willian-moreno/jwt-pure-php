@@ -179,9 +179,17 @@
             let time = 59;
             const infoTokenExpireIn = document.querySelector('.expire-in');
             infoTokenExpireIn.innerText = `Token expire in 60 seconds`;
+
             if (interval) clearInterval(interval);
             interval = setInterval(async () => {
-                if (time <= 0) clearInterval(interval);
+                if (time <= 0) {
+                    tokenStatus.innerHTML = `
+                        <div class="alert alert-danger mb-5" role="alert">
+                            <strong>Token expired</strong>
+                        </div>
+                    `;
+                    clearInterval(interval);
+                }
                 infoTokenExpireIn.innerText = `Token expire in ${time} seconds`;
                 --time;
             }, 1000);
