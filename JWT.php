@@ -1,8 +1,19 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
 
+/**
+ * Class to create and validate JSON Web Token. 
+ */
 class JWT
 {
+    /**
+     * Create a Json Web Token, with a payload that can contain any information, a secret key, and an optional header with algorithm and token type.
+     *
+     * @param array $payload List that carries any information, such as an entity ID.
+     * @param string $secret Secret key for token validation.
+     * @param array $header List which typically consists of two parts: token type which is JWT and the signature algorithm being used such as HMAC SHA256 or RSA.
+     * @return string
+     */
     static function create($payload, $secret, $header = null)
     {
         if (!$header || empty($header)) {
@@ -31,6 +42,12 @@ class JWT
         return $jwt;
     }
 
+    /**
+     * Checks if payload contain expiration value. If not, add the 'exp' parameter with 1 day of validation.
+     *
+     * @param array $payload List that carries any information, such as an entity ID.
+     * @return array
+     */
     static private function payloadValidation($payload)
     {
         $oneDayDuration = time() + (60 * 60 * 24);
@@ -44,6 +61,13 @@ class JWT
         return $payload;
     }
 
+    /**
+     * Validation to determine whether the token is valid based on signature and expiration time.
+     *
+     * @param string $token Token value to be validated.
+     * @param string $secret Secret key for token validation.
+     * @return boolean
+     */
     static function isValid($token, $secret)
     {
         $isValid = 0;
