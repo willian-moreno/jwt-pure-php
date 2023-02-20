@@ -72,9 +72,10 @@
         handleGenerateNewToken();
 
         async function handleGenerateNewToken() {
+            const validateToken = document.querySelector('#validate-token');
             const secret = document.querySelector('#secret-key').value;
 
-            const response = await fetch('getToken.php', {
+            const fetchResponse = await fetch('getToken.php', {
                 method: 'POST',
                 headers: {
                     'accept': '*',
@@ -86,9 +87,16 @@
             });
 
             const {
-                token
-            } = await response.json();
-            createdToken.innerText = token;
+                response
+            } = await fetchResponse.json();
+
+            if (response.statusCode > 299) {
+                alert(`${response.statusCode}: ${response.message ? response.message : response.statusText}`);
+                return;
+            }
+
+            createdToken.innerText = response.data.token;
+            validateToken.value = response.data.token;
             handleCountdownTokenExpiration();
             await handleTokenValidation();
         }
@@ -111,11 +119,12 @@
             const validateToken = document.querySelector('#validate-token').value;
             const secret = document.querySelector('#test-secret-key').value;
 
-            const response = await fetch('validToken.php', {
+            const fetchResponse = await fetch('validToken.php', {
                 method: 'POST',
                 headers: {
                     'accept': '*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${validateToken}`
                 },
                 body: JSON.stringify({
                     token: validateToken,
@@ -124,9 +133,17 @@
             });
 
             const {
+                response
+            } = await fetchResponse.json();
+
+            if (response.statusCode > 299) {
+                alert(`${response.statusCode}: ${response.message ? response.message : response.statusText}`);
+            }
+
+            const {
                 status,
                 message
-            } = await response.json();
+            } = response.data;
 
             tokenStatus.innerHTML = `
             <div class="alert alert-${status === 1 ? 'success' : 'danger'} mb-5" role="alert">
