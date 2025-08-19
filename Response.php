@@ -1,5 +1,6 @@
 <?php
-require_once('./HttpStatusCode.php');
+
+require_once __DIR__ . '/HttpStatusCode.php';
 
 /**
  * Default return structure for HTTP requests.
@@ -73,8 +74,8 @@ class Response
         static::$aResponse['response'] = array(
             'statusCode' => $nStatusCode,
             'statusText' => $statusText,
-            'message' => mb_convert_encoding($cMessage, 'utf-8', 'iso8859-1'),
-            'previous' => mb_convert_encoding($cPrevious, 'utf-8', 'iso8859-1'),
+            'message' => is_string($cMessage) ? mb_convert_encoding($cMessage, 'utf-8', 'iso8859-1') : $cMessage,
+            'previous' => $cPrevious,
             'data' => $aData
         );
     }

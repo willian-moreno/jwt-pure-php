@@ -1,10 +1,10 @@
 <?php
 
-require_once('./JWT.php');
+require_once __DIR__ . '/JWT.php';
 
 header('Content-Type: application/json');
 
-require_once('./Response.php');
+require_once __DIR__ . '/Response.php';
 
 $cData = file_get_contents('php://input');
 $aData = json_decode($cData, true);
@@ -14,14 +14,15 @@ $secret = isset($aData['secret']) ? $aData['secret'] : '';
 if (empty($secret)) {
     Response::error('', 400);
 }
+
 $expiration = date('Y-m-d H:i:s', time() + 60);
 
 $payload = array(
     'exp' => $expiration
 );
 
-$jwt = JWT::create($payload, $secret);
+$token = (new JWT())->create($payload, $secret);
 
 Response::success('', 200, array(
-    'token' => $jwt,
+    'token' => $token,
 ));

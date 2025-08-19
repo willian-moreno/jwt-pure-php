@@ -17,10 +17,10 @@
         <strong class="expire-in">Token expire in 60 seconds</strong>
     </div>
 
-    <div class="mb-5 d-flex align-center justify-content-between">
-        <div class="w-100 p-2 border rounded-lg mr-3" id="created-token" name="created-token">
+    <div class="mb-5">
+        <div class="w-100 p-2 border rounded-lg mb-3" id="created-token" name="created-token" style="word-break: break-all;">
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex">
             <button class="btn copy btn-outline-secondary mr-3" type="button">
                 Copy
             </button>
@@ -39,7 +39,7 @@
     <div class="form-row">
         <div class="form-group col-md-8">
             <label for="validate-token">Validate Token</label>
-            <input type="text" class="form-control" id="validate-token" placeholder="Validate Token">
+            <textarea type="text" class="form-control" id="validate-token" placeholder="Validate Token" rows="3"></textarea>
         </div>
         <div class="form-group col-md-4">
             <label for="secret-key">Test Secret Key</label>
@@ -146,7 +146,7 @@
             } = response.data;
 
             tokenStatus.innerHTML = `
-            <div class="alert alert-${status === 1 ? 'success' : 'danger'} mb-5" role="alert">
+            <div class="alert alert-${status ? 'success' : 'danger'} mb-5" role="alert">
                 <strong>${message}</strong>
             </div>
             `;
